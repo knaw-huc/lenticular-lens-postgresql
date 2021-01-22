@@ -1,0 +1,7 @@
+# lenticular_lenses extension
+comment = 'similarity functions for lenticular lenses'
+default_version = '1.0'
+module_pathname = '$libdir/lenticular_lenses'
+requires = 'plpython3u'
+relocatable = true
+trusted = true

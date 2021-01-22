@@ -1,0 +1,6 @@
+.idea
+build
+lenticular_lenses.egg-info
+*.iml
+*.o
+*.so
