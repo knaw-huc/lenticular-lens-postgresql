@@ -31,13 +31,13 @@ int* lengths_of_chars(const char *text, int byte_len, int str_len)
  */
 static inline bool rest_of_char_same(const char *s1, const char *s2, int len)
 {
-	while (len > 0)
-	{
-		len--;
-		if (s1[len] != s2[len])
-			return false;
-	}
-	return true;
+  while (len > 0)
+  {
+    len--;
+    if (s1[len] != s2[len])
+      return false;
+  }
+  return true;
 }
 
 /*

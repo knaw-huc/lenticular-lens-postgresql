@@ -75,17 +75,17 @@ int _levenshtein(const char *source, int slen,
   int del_c = 1;
   int sub_c = 1;
 
-	// Convert string lengths (in bytes) to lengths in characters.
-	// Use PostgreSQL function to get length of multibyte characters.
-	int m = pg_mbstrlen_with_len(source, slen);
-	int n = pg_mbstrlen_with_len(target, tlen);
+  // Convert string lengths (in bytes) to lengths in characters.
+  // Use PostgreSQL function to get length of multibyte characters.
+  int m = pg_mbstrlen_with_len(source, slen);
+  int n = pg_mbstrlen_with_len(target, tlen);
 
   // We can transform an empty s into t with n insertions, or a non-empty t
   // into an empty s with m deletions.
-	if (!m)
-		return n * ins_c;
-	if (!n)
-		return m * del_c;
+  if (!m)
+    return n * ins_c;
+  if (!n)
+    return m * del_c;
 
   int start_column = 0;
   int stop_column = m + 1;
@@ -145,33 +145,33 @@ int _levenshtein(const char *source, int slen,
   if (m != slen || n != tlen)
     s_char_len = lengths_of_chars(source, slen, m);
 
-	// One more cell for initialization column and row
-	++m;
-	++n;
+  // One more cell for initialization column and row
+  ++m;
+  ++n;
 
-	// Previous and current rows of notional array.
-	// Uses the PostgreSQL functions palloc and pfree instead of the
+  // Previous and current rows of notional array.
+  // Uses the PostgreSQL functions palloc and pfree instead of the
   // corresponding C library functions malloc and free. The memory allocated
   // by palloc will be freed automatically at the end of each transaction,
   // preventing memory leaks.
-	int *prev = (int *) palloc(2 * m * sizeof(int));
-	int *curr = prev + m;
+  int *prev = (int *) palloc(2 * m * sizeof(int));
+  int *curr = prev + m;
 
-	// To transform the first i characters of s into the first 0 characters of
-	// t, we must perform i deletions.
-	int i;
-	for (i = start_column; i < stop_column; i++)
-		prev[i] = i * del_c;
+  // To transform the first i characters of s into the first 0 characters of
+  // t, we must perform i deletions.
+  int i;
+  for (i = start_column; i < stop_column; i++)
+    prev[i] = i * del_c;
 
-	// Loop through rows of the notional array
-	int j;
-	const char *y = target;
-	for (j = 1; j < n; j++)
-	{
-		const char *x = source;
+  // Loop through rows of the notional array
+  int j;
+  const char *y = target;
+  for (j = 1; j < n; j++)
+  {
+    const char *x = source;
 
-		// Use PostgreSQL function to get length of multibyte characters
-		int y_char_len = n != tlen + 1 ? pg_mblen(y) : 1;
+    // Use PostgreSQL function to get length of multibyte characters
+    int y_char_len = n != tlen + 1 ? pg_mblen(y) : 1;
 
     // In the best case, values percolate down the diagonal unchanged, so
     // we must increment stop_column unless it's already on the right end
@@ -195,14 +195,14 @@ int _levenshtein(const char *source, int slen,
     else
       i = start_column;
 
-		// This inner loop is critical to performance, so we include a
-		// fast-path to handle the (fairly common) case where no multibyte
-		// characters are in the mix.  The fast-path is entitled to assume
-		// that if s_char_len is not initialized then BOTH strings contain
-		// only single-byte characters.
+    // This inner loop is critical to performance, so we include a
+    // fast-path to handle the (fairly common) case where no multibyte
+    // characters are in the mix.  The fast-path is entitled to assume
+    // that if s_char_len is not initialized then BOTH strings contain
+    // only single-byte characters.
     for (; i < stop_column; i++)
     {
-      int	x_char_len = s_char_len != NULL ? s_char_len[i - 1] : 1;
+      int x_char_len = s_char_len != NULL ? s_char_len[i - 1] : 1;
 
       // Calculate costs for insertion, deletion, and substitution.
       // When calculating cost for substitution, we compare the last
@@ -228,13 +228,13 @@ int _levenshtein(const char *source, int slen,
       x += x_char_len;
     }
 
-		// Swap current row with previous row
-		int	*temp = curr;
-		curr = prev;
-		prev = temp;
+    // Swap current row with previous row
+    int	*temp = curr;
+    curr = prev;
+    prev = temp;
 
-		// Point to next character
-		y += y_char_len;
+    // Point to next character
+    y += y_char_len;
 
     // This chunk of code represents a significant performance hit if used
     // in the case where there is no max_d bound.  This is probably not
@@ -254,8 +254,8 @@ int _levenshtein(const char *source, int slen,
       // Check whether the stop column can slide left
       while (stop_column > 0)
       {
-        int	ii = stop_column - 1;
-        int	net_inserts = ii - zp;
+        int ii = stop_column - 1;
+        int net_inserts = ii - zp;
 
         if (prev[ii] + (net_inserts > 0
           ? net_inserts * ins_c : -net_inserts * del_c) <= max_d)
@@ -267,7 +267,7 @@ int _levenshtein(const char *source, int slen,
       // Check whether the start column can slide right
       while (start_column < stop_column)
       {
-        int	net_inserts = start_column - zp;
+        int net_inserts = start_column - zp;
 
         if (prev[start_column] + (net_inserts > 0
           ? net_inserts * ins_c : -net_inserts * del_c) <= max_d)
@@ -278,8 +278,10 @@ int _levenshtein(const char *source, int slen,
         // iteration of the outer loop.
         prev[start_column] = max_d + 1;
         curr[start_column] = max_d + 1;
+
         if (start_column != 0)
           source += (s_char_len != NULL) ? s_char_len[start_column - 1] : 1;
+
         start_column++;
       }
 
@@ -287,9 +289,9 @@ int _levenshtein(const char *source, int slen,
       if (start_column >= stop_column)
         return max_d + 1;
     }
-	}
+  }
 
-	// Because the final value was swapped from the previous row to the
-	// current row, that's where we'll find it.
-	return prev[m - 1];
+  // Because the final value was swapped from the previous row to the
+  // current row, that's where we'll find it.
+  return prev[m - 1];
 }

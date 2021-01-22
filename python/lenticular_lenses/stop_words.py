@@ -2,10 +2,6 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 
-# import nltk
-# nltk.download('stopwords')
-# nltk.download('punkt')
-
 
 custom_dictionaries = {
     'dutch_names': [

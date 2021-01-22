@@ -25,6 +25,12 @@ Now the Python functions can be reached by importing the `lenticular_lenses` pac
 import lenticular_lenses
 ```
 
+You will also need to download some NLTK packages:
+``` 
+python3 -m nltk.downloader stopwords
+python3 -m nltk.downloader punkt
+```
+
 If you want to update the Python code and rebuild the package, 
 you'll need `setuptools` and `wheel` installed and run the `setup.py` script
 from the `python` directory:

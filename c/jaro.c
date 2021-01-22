@@ -45,7 +45,7 @@ static double jaro(const char *source, int slen, int m, int *s_char_len,
     y = target;
     for (int j = 0; j < n; j++) {
       // Get length of current char in target
-      int	y_char_len = t_char_len[j];
+      int y_char_len = t_char_len[j];
 
       // Within the match distance, only if there is a new match
       if (j >= start && j < end && !t_matches[j]
