@@ -1,6 +1,7 @@
 .idea
 build
 lenticular_lenses.egg-info
+lenticular_lenses--1.0.sql
 *.iml
 *.o
 *.so
