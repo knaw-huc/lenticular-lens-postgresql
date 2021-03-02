@@ -25,7 +25,7 @@ else:
 
 GD['language_' + key] = language
 GD['stopwords_' + key] = init_dictionary(dictionary, additional_stopwords)
-$$ LANGUAGE plpython3u IMMUTABLE STRICT PARALLEL SAFE;
+$$ LANGUAGE plpython3u IMMUTABLE STRICT PARALLEL RESTRICTED;
 
 CREATE FUNCTION remove_stopwords(key text, input text) RETURNS text AS $$
 from lenticular_lenses.stop_words import remove_stopwords
@@ -34,5 +34,5 @@ stop_words_set = GD['stopwords_' + key]
 language = GD['language_' + key]
 
 return remove_stopwords(stop_words_set, language, input)
-$$ LANGUAGE plpython3u IMMUTABLE STRICT PARALLEL SAFE;
+$$ LANGUAGE plpython3u IMMUTABLE STRICT PARALLEL RESTRICTED;
 
