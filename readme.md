@@ -1,8 +1,8 @@
-# Lenticular Lenses PostgreSQL extension
+# Lenticular Lens PostgreSQL extension
 
 This PostgreSQL extension contains various similarity functions 
 (written in C, Python, PL/SQL and SQL) 
-that are being used in Lenticular Lenses.
+that are being used in Lenticular Lens.
 
 ## Prerequisites
 
@@ -17,12 +17,12 @@ that are being used in Lenticular Lenses.
 
 The Python code comes as a pip package that has to be installed with pip:
 ``` 
-pip3 install ./python/dist/lenticular_lenses-1.0-py3-none-any.whl 
+pip3 install ./python/dist/lenticular_lens-1.0-py3-none-any.whl 
 ```
 
-Now the Python functions can be reached by importing the `lenticular_lenses` package:
+Now the Python functions can be reached by importing the `lenticular_lens` package:
 ```python
-import lenticular_lenses
+import lenticular_lens
 ```
 
 You will also need to download some NLTK packages:
@@ -56,10 +56,10 @@ make install
 Then in PostgreSQL, run the following command in the database where 
 the extension should be available:
 ```sql 
-CREATE EXTENSION lenticular_lenses;
+CREATE EXTENSION lenticular_lens;
 ```
 
 If you want to remove the extension from a particular database, just run:
 ```sql 
-DROP EXTENSION lenticular_lenses;
+DROP EXTENSION lenticular_lens;
 ```
