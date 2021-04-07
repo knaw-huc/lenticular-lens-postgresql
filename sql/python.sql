@@ -36,3 +36,7 @@ language = GD['language_' + key]
 return remove_stopwords(stop_words_set, language, input)
 $$ LANGUAGE plpython3u IMMUTABLE STRICT PARALLEL RESTRICTED;
 
+CREATE FUNCTION get_stopwords(dictionary text) RETURNS text[] AS $$
+from lenticular_lens.stop_words import init_dictionary
+return init_dictionary(dictionary)
+$$ LANGUAGE plpython3u IMMUTABLE STRICT PARALLEL SAFE;
