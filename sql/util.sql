@@ -20,17 +20,12 @@ SELECT abs(source - target) < no_days AND
 $$ LANGUAGE sql IMMUTABLE STRICT PARALLEL SAFE;
 
 CREATE FUNCTION transform_last_name_format(name text, include_infix bool) RETURNS text AS $$
-WITH name_parts (first_name, infix, last_name) AS (
-    VALUES (coalesce(trim(substring(name from ', ([^\[]*)')), ''),
-            coalesce(trim(substring(name from '\[(.*)\]')), ''),
-            coalesce(trim(substring(name from '^[^,\[]*')), ''))
-)
-SELECT trim(first_name || ' ' ||
-            CASE WHEN include_infix AND infix != ''
-                THEN infix || ' '
-                 ELSE ''
-                END || last_name)
-FROM name_parts;
+SELECT trim(first_name || ' ' || CASE WHEN include_infix AND infix != ''
+    THEN infix || ' ' ELSE '' END || last_name)
+FROM (VALUES (coalesce(trim(substring(name from ', ([^\[]*)')), ''),
+              coalesce(trim(substring(name from '\[(.*)\]')), ''),
+              coalesce(trim(substring(name from '^[^,\[]*')), '')))
+    AS name_parts (first_name, infix, last_name);
 $$ LANGUAGE sql IMMUTABLE STRICT PARALLEL SAFE;
 
 CREATE FUNCTION get_date_part(type text, date text) RETURNS text AS $$
@@ -42,25 +37,25 @@ year = substr(date, 0, 5);
 month = substr(date, 6, 2);
 
 CASE type
-        WHEN 'year'
-            THEN IF year ~ E'^\\d+$' THEN
-                RETURN year;
-ELSE
-                RETURN NULL;
-END IF;
-WHEN 'month'
-            THEN IF month ~ E'^\\d+$' THEN
-                RETURN month;
-ELSE
-                RETURN NULL;
-END IF;
-WHEN 'year_month'
-            THEN IF year ~ E'^\\d+$' AND month ~ E'^\\d+$' THEN
-                RETURN year || '-' || month;
-ELSE
-                RETURN NULL;
-END IF;
-END CASE;
+    WHEN 'year'
+        THEN IF year ~ E'^\\d+$' THEN
+            RETURN year;
+        ELSE
+            RETURN NULL;
+        END IF;
+    WHEN 'month'
+        THEN IF month ~ E'^\\d+$' THEN
+            RETURN month;
+        ELSE
+            RETURN NULL;
+        END IF;
+    WHEN 'year_month'
+        THEN IF year ~ E'^\\d+$' AND month ~ E'^\\d+$' THEN
+            RETURN year || '-' || month;
+        ELSE
+            RETURN NULL;
+        END IF;
+    END CASE;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE STRICT PARALLEL SAFE;
 

@@ -6,19 +6,20 @@ from difflib import get_close_matches, SequenceMatcher
 
 
 def word_intersection(small: str, big: str,
-                      ordered=False, approximate: bool = True, stop_symbols="\\.\\-\\,\\+'\\?;()–"):
+                      ordered=False, approximate=True, stop_symbols=".-,+'?;()–"):
     # ----------------------------------------------------------------
     # REMOVE STOP SYMBOLS
     # ----------------------------------------------------------------
     if stop_symbols:
-        small = process_input(small, stop_word=None, stop_symbols_string=stop_symbols)
-        big = process_input(big, stop_word=None, stop_symbols_string=stop_symbols)
+        trans = str.maketrans({char: None for char in stop_symbols.replace(' ', '')})
+        small = process_input(small, stop_symbols_string=stop_symbols, trans=trans)
+        big = process_input(big, stop_symbols_string=stop_symbols, trans=trans)
 
     # ----------------------------------------------------------------
     # TOKENIZING
     # ----------------------------------------------------------------
-    smaller_set = list(filter(None, small.lower().strip().split(sep=' ')))
-    bigger_set = list(filter(None, big.lower().strip().split(sep=' ')))
+    smaller_set = list(filter(None, small.split(sep=' ')))
+    bigger_set = list(filter(None, big.split(sep=' ')))
 
     # ---------------------------------------------------------------
     # FIND INTERSECTION REGARDLESS OF THE ORDER OF THE INPUT TOKENS
@@ -54,31 +55,33 @@ def word_intersection(small: str, big: str,
                     ratios[key] = SequenceMatcher(None, key, candidates[key][0]).ratio()
 
             while True:
-                t = max(ratios, key=ratios.get)
+                if ratios:
+                    t = max(ratios, key=ratios.get)
+                    matched = candidates[t][0]
+                    if trg_counter[matched] > 0:
+                        if t in results:
+                            results[t] += [(matched, ratios[t])]
+                        else:
+                            results[t] = [(matched, ratios[t])]
 
-                matched = candidates[t][0]
-                if trg_counter[matched] > 0:
-                    if t in results:
-                        results[t] += [(matched, ratios[t])]
-                    else:
-                        results[t] = [(matched, ratios[t])]
+                        intersection.append(matched)
+                        approximation += ratios[t]
+                        trg_counter[matched] -= 1
+                        src_counter[t] -= 1
 
-                    intersection.append(matched)
-                    approximation += ratios[t]
-                    trg_counter[matched] -= 1
-                    src_counter[t] -= 1
-
-                if src_counter[t] == 0:
-                    del ratios[t]
-                else:
-                    if len(candidates[t]) == 1:
-                        del candidates[t]
+                    if src_counter[t] == 0:
                         del ratios[t]
                     else:
-                        candidates[t] = candidates[t][1:]
-                        ratios[t] = SequenceMatcher(None, t, candidates[t][0]).ratio()
+                        if len(candidates[t]) == 1:
+                            del candidates[t]
+                            del ratios[t]
+                        else:
+                            candidates[t] = candidates[t][1:]
+                            ratios[t] = SequenceMatcher(None, t, candidates[t][0]).ratio()
 
-                if len(ratios) == 0 or len(candidates) == 0:
+                    if len(ratios) == 0 or len(candidates) == 0:
+                        break
+                else:
                     break
 
             tokens = len(smaller_set)
@@ -190,33 +193,17 @@ def remove_info_in_bracket(text):
     return temp
 
 
-def remove_stop_words(text, stop_word):
-    final = ""
-    words = text.split(" ")
-    for word in words:
-        if word not in stop_word:
-            final += word if len(final) == 0 else " {}".format(word)
-
-    return final
-
-
-def process_input(text, stop_word, stop_symbols_string):
+def process_input(text, stop_symbols_string, trans):
     # DIACRITIC CHARACTERS MAPPING
-    temp = character_mapping(text)
-    temp = temp.lower()
+    string = character_mapping(text)
 
     # REMOVE DATA IN BRACKETS
     # REMOVE (....) FROM THE VALUE
-    temp = remove_info_in_bracket(temp)
-
-    # REMOVE STOP WORLD
-    if stop_word is not None and len(stop_word) > 0:
-        temp = remove_stop_words(temp, stop_word)
+    string = remove_info_in_bracket(string)
 
     # REMOVE SYMBOLS OR CHARACTER
-    stop_symbs = stop_symbols_string.replace("–", "\xe2\x80\x93")
-    if stop_symbols_string is not None and len(stop_symbols_string) > 0:
-        pattern = str("[{}]".format(stop_symbs.strip())).replace(" ", "")
-        temp = re.sub(pattern, "", temp)
+    stop_s = stop_symbols_string.strip().replace("–", "\xe2\x80\x93").replace(" ", "")
+    if stop_s is not None and len(stop_s) > 0:
+        string = string.translate(trans)
 
-    return temp.strip()
+    return string.strip()
