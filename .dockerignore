@@ -1,0 +1,8 @@
+.idea
+lenticular_lens--1.0.sql
+*.iml
+*.so
+c/*.o
+/python/build
+/python/dist
+/python/lenticular_lens.egg-info
