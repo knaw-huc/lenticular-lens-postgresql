@@ -16,6 +16,7 @@ FROM postgres:13
 
 COPY --from=builder /opt/python/dist/* /app/
 COPY --from=builder /usr/lib/postgresql/13/lib/lenticular_lens.so /usr/lib/postgresql/13/lib/
+COPY --from=builder /usr/lib/postgresql/13/lib/bitcode/lenticular_lens/ /usr/lib/postgresql/13/lib/bitcode/lenticular_lens/
 COPY --from=builder /usr/lib/postgresql/13/lib/bitcode/lenticular_lens* /usr/lib/postgresql/13/lib/bitcode/
 COPY --from=builder /usr/share/postgresql/13/extension/lenticular_lens* /usr/share/postgresql/13/extension/
 
