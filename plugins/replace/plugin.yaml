@@ -1,0 +1,19 @@
+type: transformer
+
+methods:
+  replace:
+    label: Replace
+    sql_template: replace({property}, {from}, {to})
+    items:
+      from:
+        label: From
+        type: string
+        size: large
+        default_value: ''
+        allow_empty_value: false
+      to:
+        label: To
+        type: string
+        size: large
+        default_value: ''
+        allow_empty_value: true

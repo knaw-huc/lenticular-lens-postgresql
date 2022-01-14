@@ -1,0 +1,72 @@
+type: matching_method
+
+methods:
+  numbers_delta:
+    label: Numbers Delta
+    description: The numbers delta is used to align the source and the target by approximating
+      the match of the numeric values of the selected properties according to a delta.
+    see_also:
+      - https://lenticularlens.org/matching-method/numbers
+    threshold_range: ℕ
+    match: delta({type}, {source}, {target}, {distance_start}, {distance_end})
+    field_type: number
+    accepts_similarity_method: false
+    is_similarity_method: false
+    items:
+      type:
+        label: Size difference
+        type: choices
+        choices:
+          "<>": Irrelevant
+          "<": Source < Target
+          ">": Source > Target
+      start:
+        label: Start
+        type: number
+        default_value: 0
+      end:
+        label: End
+        type: number
+        default_value: 0
+
+  time_delta:
+    label: Time Delta
+    description: The time delta is used to align the source and the target by approximating
+      the match of the date values of the selected properties according to a delta.
+    see_also:
+      - https://lenticularlens.org/matching-method/time-delta
+    threshold_range: ℕ
+    match: delta({type}, {source}, {target}, {days} + ({months} * 30) + ({years} * 365))
+    field_type: date
+    accepts_similarity_method: false
+    is_similarity_method: false
+    items:
+      type:
+        label: Should occur before or after?
+        type: choices
+        choices:
+          "<>": Irrelevant
+          "<": Source event before target event
+          ">": Source event after target event
+      years:
+        label: Years
+        type: number
+        default_value: 0
+        step: 1
+        min_value: 0
+      months:
+        label: Months
+        type: number
+        default_value: 0
+        step: 1
+        min_value: 0
+      days:
+        label: Days
+        type: number
+        default_value: 0
+        step: 1
+        min_value: 0
+      format:
+        label: Date format
+        type: string
+        default_value: YYYY-MM-DD

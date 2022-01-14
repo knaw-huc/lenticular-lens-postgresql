@@ -1,0 +1,3 @@
+CREATE FUNCTION levenshtein(text, text, int) RETURNS int
+AS 'MODULE_PATHNAME', 'levenshtein'
+LANGUAGE C IMMUTABLE STRICT PARALLEL SAFE;

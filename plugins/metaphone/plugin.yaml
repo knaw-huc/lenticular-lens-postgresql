@@ -1,0 +1,43 @@
+type: matching_method
+
+requires:
+  postgresql:
+    - fuzzystrmatch
+
+methods:
+  metaphone:
+    label: Metaphone
+    description: Metaphone is a phonetic algorithm for a more accurate encoding of words
+      by sound (as compared to Soundex) as pronounced in English. In this algorithm
+      as with Soundex, similar-sounding words should share the same encoding key which
+      is an approximate phonetic representation of the original word.
+    see_also:
+      - https://lenticularlens.org/matching-method/metaphone
+      - https://en.wikipedia.org/wiki/Metaphone
+    threshold_range: "{0, 1}"
+    field: metaphone({property}, {max})
+    accepts_similarity_method: true
+    is_similarity_method: false
+    items:
+      max:
+        label: Maximum size
+        type: number
+        default_value: 20
+        step: 1
+        min_value: 1
+        max_value: 255
+
+  dmetaphone:
+    label: Double Metaphone
+    description: Double metaphone is a third generation phonetic algorithm improvement
+      after Soundex and Metaphone for an accurately encoding words by sound as pronounced
+      in English. It is called "Double" because it can return both a primary and a secondary
+      code for a string; this accounts for some ambiguous cases as well as for multiple
+      variants of surnames with common ancestry.
+    see_also:
+      - https://lenticularlens.org/matching-method/double-metaphone
+      - https://en.wikipedia.org/wiki/Metaphone
+    threshold_range: "{0, 1}"
+    field: dmetaphone({property})
+    accepts_similarity_method: true
+    is_similarity_method: false

@@ -1,0 +1,27 @@
+type: matching_method
+
+requires:
+  postgresql:
+    - plpython3u
+
+methods:
+  bloothooft:
+    label: Gerrit Bloothooft
+    description: Gerrit Bloothooft description
+    see_also:
+      - https://lenticularlens.org/matching-method/bloothooft
+    threshold_range: "{0, 1}"
+    field: bloothooft({property}, {name_type})
+    accepts_similarity_method: true
+    is_similarity_method: false
+    items:
+      name_type:
+        label: Type of name
+        type: choices
+        choices:
+          first_name: First name
+          family_name: Family name
+        rdf:
+          predicate: https://lenticularlens.org/voidPlus/BloothooftNameType
+          prefix: voidPlus
+          uri: https://lenticularlens.org/voidPlus/

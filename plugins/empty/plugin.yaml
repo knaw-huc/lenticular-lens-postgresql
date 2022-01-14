@@ -1,0 +1,10 @@
+type: filter_function
+
+methods:
+  empty:
+    label: Has no values
+    sql_template: "{property} IS NULL"
+
+  not_empty:
+    label: Has a value
+    sql_template: "{property} IS NOT NULL"

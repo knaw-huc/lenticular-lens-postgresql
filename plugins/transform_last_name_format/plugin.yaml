@@ -1,0 +1,11 @@
+type: transformer
+
+methods:
+  transform_last_name_format:
+    label: Transform 'last name first' format
+    sql_template: transform_last_name_format({property}, {infix})
+    items:
+      infix:
+        label: Keep infix?
+        type: boolean
+        default_value: true

@@ -1,0 +1,13 @@
+type: matching_method
+
+methods:
+  exact:
+    label: Exact match
+    description: Aligns source and target’s IRIs whenever their respective user selected
+      property values are identical.
+    see_also:
+      - https://lenticularlens.org/matching-method/exact
+    threshold_range: "{0, 1}"
+    match: "{source} = {target}"
+    accepts_similarity_method: false
+    is_similarity_method: false

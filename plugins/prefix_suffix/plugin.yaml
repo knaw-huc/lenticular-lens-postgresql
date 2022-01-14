@@ -1,0 +1,24 @@
+type: transformer
+
+methods:
+  prefix:
+    label: Prefix
+    sql_template: "{prefix} || {property}"
+    items:
+      prefix:
+        label: Prefix with
+        type: string
+        size: large
+        default_value: ''
+        allow_empty_value: false
+
+  suffix:
+    label: Suffix
+    sql_template: "{property} || {suffix}"
+    items:
+      suffix:
+        label: Suffix with
+        type: string
+        size: large
+        default_value: ''
+        allow_empty_value: false

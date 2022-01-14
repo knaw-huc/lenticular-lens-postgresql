@@ -1,0 +1,6 @@
+type: transformer
+
+methods:
+  nfkc_normalize:
+    label: Unicode equivalence normalization (NFKC)
+    sql_template: normalize({property}, nfkc)

@@ -1,0 +1,14 @@
+type: filter_function
+
+methods:
+  contains:
+    label: Contains
+    sql_template: "{property} ILIKE {value}"
+    type: string
+    help_text: Use % as a wildcard character
+
+  not_contains:
+    label: Does not contain
+    sql_template: "{property} NOT ILIKE {value}"
+    type: string
+    help_text: Use % as a wildcard character

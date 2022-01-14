@@ -1,0 +1,32 @@
+type: matching_method
+
+methods:
+  intermediate:
+    label: Intermediate dataset
+    description: The method aligns the source and the target’s IRIs via an intermediate
+      database by using properties that potentially present different descriptions of
+      the same entity, such as country name and country code. This is possible by providing
+      an intermediate dataset that binds the two alternative descriptions to the very
+      same identifier.
+    see_also:
+      - https://lenticularlens.org/matching-method/intermediate
+    threshold_range: "{0, 1}"
+    match: "{source_intermediate} = {target_intermediate}"
+    accepts_similarity_method: false
+    is_similarity_method: false
+    items:
+      entity_type_selection:
+        label: Intermediate dataset
+        type: entity_type_selection
+      intermediate_source:
+        label: Source
+        type: property
+        default_value:
+          - - ''
+        entity_type_selection_key: entity_type_selection
+      intermediate_target:
+        label: Target
+        type: property
+        default_value:
+          - - ''
+        entity_type_selection_key: entity_type_selection

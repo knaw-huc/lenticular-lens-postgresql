@@ -1,0 +1,12 @@
+type: filter_function
+
+methods:
+  equals:
+    label: Equal to
+    sql_template: "{property} = {value}"
+    type: string
+
+  not_equals:
+    label: Not equal to
+    sql_template: "{property} != {value}"
+    type: string

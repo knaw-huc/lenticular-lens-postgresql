@@ -1,0 +1,42 @@
+type: matching_method
+
+methods:
+  same_year_month:
+    label: Same Year/Month
+    description: Same Year/Month is used to align source and target’s IRIs whenever
+      an exact match of the year or year and month is observed between source and target's
+      input dates.
+    see_also:
+      - https://lenticularlens.org/matching-method/same-year-month
+    threshold_range: "{0, 1}"
+    field: get_date_part({date_part}, {property})
+    accepts_similarity_method: false
+    is_similarity_method: false
+    items:
+      date_part:
+        label: Same Year/Month?
+        type: choices
+        choices:
+          year: Year
+          month: Month
+          year_month: Year and Month
+        rdf:
+          predicate: http://www.w3.org/2006/time#unitType
+          prefix: time
+          uri: http://www.w3.org/2006/time#
+          values:
+            month:
+              - predicate: http://www.w3.org/2006/time#unitMonth
+                prefix: time
+                uri: http://www.w3.org/2006/time#
+            year:
+              - predicate: http://www.w3.org/2006/time#unitYear
+                prefix: time
+                uri: http://www.w3.org/2006/time#
+            year_month:
+              - predicate: http://www.w3.org/2006/time#unitYear
+                prefix: time
+                uri: http://www.w3.org/2006/time#
+              - predicate: http://www.w3.org/2006/time#unitMonth
+                prefix: time
+                uri: http://www.w3.org/2006/time#

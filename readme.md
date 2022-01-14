@@ -35,7 +35,7 @@ If you want to update the Python code and rebuild the package,
 you'll need `setuptools` and `wheel` installed and run the `setup.py` script
 from the `python` directory:
 ``` 
-pip3 install install setuptools wheel
+pip3 install setuptools wheel
 python3 setup.py sdist bdist_wheel
 ```
 

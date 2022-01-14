@@ -1,0 +1,49 @@
+type: transformer
+
+requires:
+  postgresql:
+    - plpython3u
+  python:
+    - nltk
+
+cmd: su postgres -c "python3 -m nltk.downloader stopwords" && su postgres -c "python3 -m nltk.downloader punkt"
+
+methods:
+  stopwords:
+    label: Stopwords
+    sql_template: remove_stopwords({key}, {property})
+    items:
+      dictionary:
+        label: Dictionary
+        type: choices
+        choices:
+          arabic: Arabic
+          azerbaijani: Azerbaijani
+          danish: Danish
+          dutch: Dutch
+          dutch_names: Dutch names
+          english: English
+          finnish: Finnish
+          french: French
+          german: German
+          greek: Greek
+          hungarian: Hungarian
+          indonesian: Indonesian
+          italian: Italian
+          kazakh: Kazakh
+          nepali: Nepali
+          norwegian: Norwegian
+          portuguese: Portuguese
+          romanian: Romanian
+          russian: Russian
+          slovene: Slovene
+          spanish: Spanish
+          swedish: Swedish
+          tajik: Tajik
+          turkish: Turkish
+        allow_empty_value: false
+      additional:
+        label: Specify additional stop words
+        type: tags
+        default_value: [ ]
+        allow_empty_value: true

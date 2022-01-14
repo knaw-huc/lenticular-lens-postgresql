@@ -1,0 +1,36 @@
+type: matching_method
+
+requires:
+  postgresql:
+    - pg_trgm
+
+methods:
+  trigram:
+    label: Trigram
+    description: Trigrams are a special case of the n-gram, where n is 3. It is a contiguous
+      sequence of three items from a given sample.
+    see_also:
+      - https://lenticularlens.org/matching-method/trigram
+      - https://en.wikipedia.org/wiki/Trigram
+      - https://en.wikipedia.org/wiki/N-gram
+    threshold_range: "]0, 1]"
+    match: "{source} % {target}"
+    similarity: similarity({source}, {target})
+    before_index: SELECT set_config('pg_trgm.similarity_threshold', {threshold}, true);
+    index: gin ({target} gin_trgm_ops)
+    requires_postgresql:
+      - pg_trgm
+    accepts_similarity_method: false
+    is_similarity_method: true
+    items:
+      threshold:
+        label: Similarity threshold
+        type: range
+        default_value: 0.7
+        step: 0.05
+        min_excl_value: 0
+        max_excl_value: 1
+        rdf:
+          predicate: https://lenticularlens.org/voidPlus/similarityThreshold
+          prefix: voidPlus
+          uri: https://lenticularlens.org/voidPlus/

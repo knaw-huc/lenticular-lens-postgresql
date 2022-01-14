@@ -1,0 +1,45 @@
+type: matching_method
+
+requires:
+  postgresql:
+    - plpython3u
+  python:
+    - unidecode
+
+methods:
+  word_intersection:
+    label: Word Intersection
+    description: The word intersection approximation method is originally designed to
+      find a subset of words within a larger text. However, it could also be used for
+      any pair of strings regardless of the strings sizes.
+    see_also:
+      - https://lenticularlens.org/matching-method/word-intersection
+    threshold_range: "]0, 1]"
+    similarity: word_intersection({source}, {target}, {ordered}, {approximate}, {stop_symbols})
+    condition: "{similarity} >= {threshold}"
+    accepts_similarity_method: false
+    is_similarity_method: true
+    items:
+      ordered:
+        label: Keep the order of the words
+        type: boolean
+        default_value: false
+      approximate:
+        label: Each word should be approximated
+        type: boolean
+        default_value: true
+      stop_symbols:
+        label: Stop symbols
+        type: string
+        default_value: ".-,+'?;()–"
+      threshold:
+        label: Similarity threshold
+        type: range
+        default_value: 0.7
+        step: 0.05
+        min_excl_value: 0
+        max_excl_value: 1
+        rdf:
+          predicate: https://lenticularlens.org/voidPlus/similarityThreshold
+          prefix: voidPlus
+          uri: https://lenticularlens.org/voidPlus/

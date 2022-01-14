@@ -1,0 +1,60 @@
+type: matching_method
+
+methods:
+  levenshtein_distance:
+    label: Levenshtein distance
+    description: This method is used to align source and target’s IRIs whenever the
+      distance of their respective user selected property values are above a given Levenshtein
+      edit distance threshold. Edit distance is a way of quantifying how dissimilar
+      two strings (e.g., words) are to one another by counting the minimum number of
+      operations ε (removal, insertion, or substitution of a character in the string)
+      required to transform one string into the other.
+    see_also:
+      - https://lenticularlens.org/matching-method/levenshtein
+      - https://en.wikipedia.org/wiki/Edit_distance
+    threshold_range: ℕ
+    match: levenshtein({source}, {target}, {max_distance})
+    similarity: similarity({source}, {target}, levenshtein({source}, {target}, {max_distance}))
+    condition: "{match} <= {max_distance}"
+    accepts_similarity_method: false
+    is_similarity_method: true
+    items:
+      max_distance:
+        label: Maximum distance
+        type: number
+        default_value: 1
+        step: 1
+        min_excl_value: 0
+        rdf:
+          predicate: https://lenticularlens.org/voidPlus/maxDistance
+          prefix: voidPlus
+          uri: https://lenticularlens.org/voidPlus/
+
+  levenshtein_normalized:
+    label: Levenshtein normalized
+    description: This method is used to align source and target’s IRIs whenever the
+      similarity score of their respective user selected property values are above a
+      given Levenshtein threshold. Edit distance is a way of quantifying how dissimilar
+      two strings (e.g., words) are to one another by counting the minimum number of
+      operations ε (removal, insertion, or substitution of a character in the string)
+      required to transform one string into the other.
+    see_also:
+      - https://lenticularlens.org/matching-method/levenshtein
+      - https://en.wikipedia.org/wiki/Edit_distance
+    threshold_range: "]0, 1]"
+    similarity: similarity({source}, {target}, levenshtein({source}, {target}, -1))
+    condition: "{similarity} >= {threshold}"
+    accepts_similarity_method: false
+    is_similarity_method: true
+    items:
+      threshold:
+        label: Similarity threshold
+        type: range
+        default_value: 0.7
+        step: 0.05
+        min_excl_value: 0
+        max_excl_value: 1
+        rdf:
+          predicate: https://lenticularlens.org/voidPlus/similarityThreshold
+          prefix: voidPlus
+          uri: https://lenticularlens.org/voidPlus/

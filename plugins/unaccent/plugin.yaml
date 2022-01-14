@@ -1,0 +1,6 @@
+type: transformer
+
+methods:
+  unaccent:
+    label: Unaccent
+    sql_template: unaccent({property})

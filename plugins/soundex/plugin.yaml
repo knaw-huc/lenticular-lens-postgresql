@@ -1,0 +1,35 @@
+type: matching_method
+
+requires:
+  postgresql:
+    - plpython3u
+  python:
+    - unidecode
+
+methods:
+  soundex:
+    label: Soundex
+    description: Soundex is a phonetic algorithm for indexing names by sound, as pronounced
+      in English. The goal is for homophones to be encoded to the same representation
+      so that they can be matched despite minor differences in spelling. The algorithm
+      mainly encodes consonants; a vowel will not be encoded unless it is the first
+      letter.
+    see_also:
+      - https://lenticularlens.org/matching-method/soundex
+      - https://en.wikipedia.org/wiki/Soundex
+    threshold_range: "{0, 1}"
+    field: soundex({property}, {size})
+    accepts_similarity_method: true
+    is_similarity_method: false
+    items:
+      size:
+        label: Soundex size
+        type: range
+        default_value: 4
+        step: 1
+        min_value: 1
+        max_value: 5
+        rdf:
+          predicate: https://lenticularlens.org/voidPlus/soundexSize
+          prefix: voidPlus
+          uri: https://lenticularlens.org/voidPlus/
