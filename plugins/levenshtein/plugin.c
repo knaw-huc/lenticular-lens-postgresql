@@ -30,26 +30,6 @@
 #include "util.h"
 #include "fmgr.h"
 
-PG_MODULE_MAGIC;
-
-PG_FUNCTION_INFO_V1(levenshtein);
-Datum levenshtein(PG_FUNCTION_ARGS)
-{
-  text *src = PG_GETARG_TEXT_PP(0);
-  text *dst = PG_GETARG_TEXT_PP(1);
-  int	max_d = PG_GETARG_INT32(2);
-
-  // Extract a pointer to the actual character data
-  const char *s_data = VARDATA_ANY(src);
-  const char *t_data = VARDATA_ANY(dst);
-
-  // Determine length of each string in bytes
-  int s_bytes = VARSIZE_ANY_EXHDR(src);
-  int t_bytes = VARSIZE_ANY_EXHDR(dst);
-
-  PG_RETURN_INT32(_levenshtein(s_data, s_bytes, t_data, t_bytes, max_d));
-}
-
 /*
  * Levenshtein distance implementation from the PostgreSQL fuzzystrmatch module,
  * adapted to simplify and without a limit on the string length.
@@ -87,8 +67,8 @@ Datum levenshtein(PG_FUNCTION_ARGS)
  * identify the portion of the matrix close to the diagonal which can still
  * affect the final answer.
  */
-int _levenshtein(const char *source, int slen,
-                 const char *target, int tlen, int max_d)
+static int _levenshtein(const char *source, int slen,
+                        const char *target, int tlen, int max_d)
 {
   // Costs remain 1
   int ins_c = 1;
@@ -314,4 +294,22 @@ int _levenshtein(const char *source, int slen,
   // Because the final value was swapped from the previous row to the
   // current row, that's where we'll find it.
   return prev[m - 1];
+}
+
+PG_FUNCTION_INFO_V1(levenshtein);
+Datum levenshtein(PG_FUNCTION_ARGS)
+{
+  text *src = PG_GETARG_TEXT_PP(0);
+  text *dst = PG_GETARG_TEXT_PP(1);
+  int	max_d = PG_GETARG_INT32(2);
+
+  // Extract a pointer to the actual character data
+  const char *s_data = VARDATA_ANY(src);
+  const char *t_data = VARDATA_ANY(dst);
+
+  // Determine length of each string in bytes
+  int s_bytes = VARSIZE_ANY_EXHDR(src);
+  int t_bytes = VARSIZE_ANY_EXHDR(dst);
+
+  PG_RETURN_INT32(_levenshtein(s_data, s_bytes, t_data, t_bytes, max_d));
 }

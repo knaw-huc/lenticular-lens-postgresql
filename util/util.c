@@ -2,6 +2,9 @@
 #include "postgres.h"
 #include "mb/pg_wchar.h"
 #include "util.h"
+#include "fmgr.h"
+
+PG_MODULE_MAGIC;
 
 /*
  * In order to avoid calling pg_mblen() repeatedly on each character,

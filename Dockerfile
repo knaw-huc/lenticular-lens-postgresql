@@ -1,31 +1,31 @@
-FROM postgres:13 AS builder
+FROM postgres:14 AS builder
 
 RUN apt-get update && \
-    apt-get install -y wget unzip python3-pip postgresql-server-dev-13 postgresql-plpython3-13
+    apt-get install -y wget unzip python3-pip postgresql-server-dev-14 postgresql-plpython3-14
+
+RUN pip3 install setuptools wheel pyyaml
 
 COPY ./ /opt
 
-WORKDIR /opt/python
-RUN pip3 install setuptools wheel && \
-    python3 setup.py sdist bdist_wheel
-
 WORKDIR /opt
-RUN make && make install
+RUN python3 package.py
 
-FROM postgres:13
+WORKDIR /opt/build
+RUN ./build.sh && ./post-install.sh
 
-COPY --from=builder /opt/python/dist/* /app/
-COPY --from=builder /usr/lib/postgresql/13/lib/lenticular_lens.so /usr/lib/postgresql/13/lib/
-COPY --from=builder /usr/lib/postgresql/13/lib/bitcode/lenticular_lens/ /usr/lib/postgresql/13/lib/bitcode/lenticular_lens/
-COPY --from=builder /usr/lib/postgresql/13/lib/bitcode/lenticular_lens* /usr/lib/postgresql/13/lib/bitcode/
-COPY --from=builder /usr/share/postgresql/13/extension/lenticular_lens* /usr/share/postgresql/13/extension/
+FROM postgres:14
+
+COPY --from=builder /opt/build/dist/* /app/
+COPY --from=builder /opt/build/post-install.sh /app/
+COPY --from=builder /usr/lib/postgresql/14/lib/lenticular_lens.so /usr/lib/postgresql/14/lib/
+COPY --from=builder /usr/lib/postgresql/14/lib/bitcode/lenticular_lens/ /usr/lib/postgresql/14/lib/bitcode/lenticular_lens/
+COPY --from=builder /usr/lib/postgresql/14/lib/bitcode/lenticular_lens* /usr/lib/postgresql/14/lib/bitcode/
+COPY --from=builder /usr/share/postgresql/14/extension/lenticular_lens* /usr/share/postgresql/14/extension/
 
 RUN apt-get update && \
-    apt-get install -y python3-pip postgresql-plpython3-13
+    apt-get install -y python3-pip postgresql-plpython3-14
 
 RUN pip3 install /app/lenticular_lens-1.0-py3-none-any.whl
-
-RUN su postgres -c "python3 -m nltk.downloader stopwords" && \
-    su postgres -c "python3 -m nltk.downloader punkt"
+RUN /app/post-install.sh
 
 RUN echo listen_addresses='0.0.0.0' >> /usr/lib/tmpfiles.d/postgresql.conf

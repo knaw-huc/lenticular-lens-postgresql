@@ -4,50 +4,12 @@
 #include "util.h"
 #include "fmgr.h"
 
-PG_MODULE_MAGIC;
-
-PG_FUNCTION_INFO_V1(jaro);
-Datum jaro(PG_FUNCTION_ARGS)
-{
-  text *src = PG_GETARG_TEXT_PP(0);
-  text *dst = PG_GETARG_TEXT_PP(1);
-
-  // Extract a pointer to the actual character data
-  const char *s_data = VARDATA_ANY(src);
-  const char *t_data = VARDATA_ANY(dst);
-
-  // Determine length of each string in bytes
-  int s_bytes = VARSIZE_ANY_EXHDR(src);
-  int t_bytes = VARSIZE_ANY_EXHDR(dst);
-
-  PG_RETURN_FLOAT8(_jaro_winkler(s_data, s_bytes, t_data, t_bytes, false, 0.0));
-}
-
-PG_FUNCTION_INFO_V1(jaro_winkler);
-Datum jaro_winkler(PG_FUNCTION_ARGS)
-{
-  text *src = PG_GETARG_TEXT_PP(0);
-  text *dst = PG_GETARG_TEXT_PP(1);
-  double prefix_weight = PG_GETARG_FLOAT8(2);
-
-  // Extract a pointer to the actual character data
-  const char *s_data = VARDATA_ANY(src);
-  const char *t_data = VARDATA_ANY(dst);
-
-  // Determine length of each string in bytes
-  int s_bytes = VARSIZE_ANY_EXHDR(src);
-  int t_bytes = VARSIZE_ANY_EXHDR(dst);
-
-  PG_RETURN_FLOAT8(_jaro_winkler(s_data, s_bytes, t_data, t_bytes,
-                                 true, prefix_weight));
-}
-
 /*
  * Jaro code based on http://www.rosettacode.org/wiki/Jaro_distance#C
  * Adapted to use PostgreSQL functions to deal with multi-byte chars.
  */
-static double jaro(const char *source, int slen, int m, int *s_char_len,
-                   const char *target, int tlen, int n, int *t_char_len)
+static double jaro_impl(const char *source, int slen, int m, int *s_char_len,
+                        const char *target, int tlen, int n, int *t_char_len)
 {
   // If both strings are empty return 1
   if (!m && !n) return 1.0;
@@ -149,13 +111,14 @@ static double jaro(const char *source, int slen, int m, int *s_char_len,
     + ((matches - transpositions) / matches)) / 3.0;
 }
 
-static double jaro_winkler(const char *source, int slen, int m, int *s_char_len,
-                           const char *target, int tlen, int n, int *t_char_len,
-                           double prefix_weight)
+static double jaro_winkler_impl(const char *source, int slen,
+                                int m, int *s_char_len,
+                                const char *target, int tlen,
+                                int n, int *t_char_len, double prefix_weight)
 {
   // Compute Jaro distance
-  double jaro_d = jaro(source, slen, m, s_char_len,
-                       target, tlen, n, t_char_len);
+  double jaro_d = jaro_impl(source, slen, m, s_char_len,
+                            target, tlen, n, t_char_len);
 
   // Compute the common prefix length
   int common_prefix = 0;
@@ -183,8 +146,9 @@ static double jaro_winkler(const char *source, int slen, int m, int *s_char_len,
   return jaro_d + (common_prefix * prefix_weight * (1.0 - jaro_d));
 }
 
-double _jaro_winkler(const char *source, int slen, const char *target, int tlen,
-                     bool use_jaro_winkler, double prefix_weight)
+static double _jaro_winkler(const char *source, int slen,
+                            const char *target, int tlen,
+                            bool use_jaro_winkler, double prefix_weight)
 {
   // Convert string lengths (in bytes) to lengths in characters
   // Use PostgreSQL function to get length of multibyte characters
@@ -197,8 +161,44 @@ double _jaro_winkler(const char *source, int slen, const char *target, int tlen,
   int *t_char_len = lengths_of_chars(target, tlen, n);
 
   if (use_jaro_winkler)
-    return jaro_winkler(source, slen, m, s_char_len,
-                        target, tlen, n, t_char_len, prefix_weight);
+    return jaro_winkler_impl(source, slen, m, s_char_len,
+                             target, tlen, n, t_char_len, prefix_weight);
 
-  return jaro(source, slen, m, s_char_len, target, tlen, n, t_char_len);
+  return jaro_impl(source, slen, m, s_char_len, target, tlen, n, t_char_len);
+}
+
+PG_FUNCTION_INFO_V1(jaro);
+Datum jaro(PG_FUNCTION_ARGS)
+{
+  text *src = PG_GETARG_TEXT_PP(0);
+  text *dst = PG_GETARG_TEXT_PP(1);
+
+  // Extract a pointer to the actual character data
+  const char *s_data = VARDATA_ANY(src);
+  const char *t_data = VARDATA_ANY(dst);
+
+  // Determine length of each string in bytes
+  int s_bytes = VARSIZE_ANY_EXHDR(src);
+  int t_bytes = VARSIZE_ANY_EXHDR(dst);
+
+  PG_RETURN_FLOAT8(_jaro_winkler(s_data, s_bytes, t_data, t_bytes, false, 0.0));
+}
+
+PG_FUNCTION_INFO_V1(jaro_winkler);
+Datum jaro_winkler(PG_FUNCTION_ARGS)
+{
+  text *src = PG_GETARG_TEXT_PP(0);
+  text *dst = PG_GETARG_TEXT_PP(1);
+  double prefix_weight = PG_GETARG_FLOAT8(2);
+
+  // Extract a pointer to the actual character data
+  const char *s_data = VARDATA_ANY(src);
+  const char *t_data = VARDATA_ANY(dst);
+
+  // Determine length of each string in bytes
+  int s_bytes = VARSIZE_ANY_EXHDR(src);
+  int t_bytes = VARSIZE_ANY_EXHDR(dst);
+
+  PG_RETURN_FLOAT8(_jaro_winkler(s_data, s_bytes, t_data, t_bytes,
+                                 true, prefix_weight));
 }

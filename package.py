@@ -2,13 +2,14 @@ import os
 from inspect import cleandoc
 
 import yaml
+import json
 import shutil
 
 util_dir = os.path.dirname(__file__) + '/util'
 build_dir = os.path.dirname(__file__) + '/build'
 plugins_dir = os.path.dirname(__file__) + '/plugins'
 
-shutil.rmtree(build_dir)
+shutil.rmtree(build_dir, ignore_errors=True)
 os.mkdir(build_dir)
 
 plugins = os.listdir(plugins_dir)
@@ -26,11 +27,19 @@ for name in plugins:
 # Create the PostgreSQL extension script/SQL file
 # See also: https://www.postgresql.org/docs/current/extend-extensions.html
 with open(build_dir + '/lenticular_lens--1.0.sql', 'w') as f:
-    f.write(cleandoc('''
-    -- Complain if script is sourced in psql, rather than via CREATE EXTENSION
-    \echo Use "CREATE EXTENSION lenticular_lens" to load this file. \quit
-    '''))
-    f.write('\n\n')
+    with open(util_dir + '/main.sql', 'r') as main_f:
+        f.write(main_f.read())
+        f.write('\n')
+
+    for config in plugins_config.values():
+        for (method_name, method_config) in config['methods'].items():
+            if config['type'] == 'filter_function' or \
+                    config['type'] == 'matching_method' or \
+                    config['type'] == 'transformer':
+                config_json = json.dumps(method_config).replace("'", "''")
+                f.write(f"INSERT INTO {config['type']}s "
+                        f"VALUES ('{method_name}', '{config_json}');\n")
+    f.write('\n')
 
     with open(util_dir + '/util.sql', 'r') as util_f:
         f.write(util_f.read())
@@ -97,73 +106,22 @@ os.mkdir(c_dir)
 
 shutil.copyfile(util_dir + '/util.c', c_dir + '/util.c')
 shutil.copyfile(util_dir + '/util.h', c_dir + '/util.h')
+shutil.copyfile(util_dir + '/Makefile', build_dir + '/Makefile')
 
 for name in plugins:
     c_path = plugins_dir + '/' + name + '/plugin.c'
     if os.path.isfile(c_path):
         shutil.copyfile(c_path, c_dir + '/' + name + '.c')
 
-# Create Makefile for compiling C code and packaging PostgreSQL extension
-with open(build_dir + '/Makefile', 'w') as f:
-    f.write(cleandoc('''
-    # lenticular_lens extension
-    
-    EXTENSION = lenticular_lens
-    MODULE_big = lenticular_lens
-    PGFILEDESC = "lenticular_lens - similarity functions for lenticular lens"
-    SRCS=$(wildcard *.c)
-    OBJS=$(SRCS:.c=.o)
-    PG_CONFIG = pg_config
-    
-    DATA = lenticular_lens--1.0.sql
-    EXTRA_CLEAN = lenticular_lens--1.0.sql
-    
-    PGXS := $(shell $(PG_CONFIG) --pgxs)
-    include $(PGXS)
-    '''))
+# Prepare build and post-install script
+shutil.copyfile(util_dir + '/build.sh', build_dir + '/build.sh')
 
-# Create build script
-with open(build_dir + '/build.sh', 'w') as f:
-    br = '\n'
+with open(build_dir + '/post-install.sh', 'w') as f:
     cmds = [config['cmd']
             for config in plugins_config.values()
             if 'cmd' in config]
 
-    f.write(cleandoc(f'''
-    # Build Python distribution
-    python3 ./python/setup.py bdist_wheel
-    
-    # Install Python distribution
-    pip3 install ./dist/lenticular_lens-1.0-py3-none-any.whl
-    
-    # Compile C code
-    make
-    
-    # Install PostgreSQL extension
-    make install
-    
-    # Additional commands
-    {br.join(cmds)}
-    '''))
+    f.write('\n'.join(cmds))
 
-# Create LL config files
-ll_config_dir = build_dir + '/ll_config'
-os.mkdir(ll_config_dir)
-
-with open(ll_config_dir + '/filter_functions.yaml', 'w') as f:
-    yaml.dump({method_name: method_config
-               for config in plugins_config.values()
-               for (method_name, method_config) in config['methods'].items()
-               if config['type'] == 'filter_function'}, f)
-
-with open(ll_config_dir + '/matching_methods.yaml', 'w') as f:
-    yaml.dump({method_name: method_config
-               for config in plugins_config.values()
-               for (method_name, method_config) in config['methods'].items()
-               if config['type'] == 'matching_method'}, f)
-
-with open(ll_config_dir + '/transformers.yaml', 'w') as f:
-    yaml.dump({method_name: method_config
-               for config in plugins_config.values()
-               for (method_name, method_config) in config['methods'].items()
-               if config['type'] == 'transformer'}, f)
+os.chmod(build_dir + '/build.sh', 0o775)
+os.chmod(build_dir + '/post-install.sh', 0o775)
