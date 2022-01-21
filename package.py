@@ -52,6 +52,8 @@ with open(build_dir + '/lenticular_lens--1.0.sql', 'w') as f:
                 f.write(sql_f.read())
                 f.write('\n')
 
+    f.write("NOTIFY extension_update, 'Update of the Lenticular Lens extensions';\n")
+
 # Create the PostgreSQL extension control file
 # See also: https://www.postgresql.org/docs/current/extend-extensions.html
 with open(build_dir + '/lenticular_lens.control', 'w') as f:

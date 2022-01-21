@@ -6,6 +6,7 @@ requires:
   python:
     - nltk
 
+# We need to download some NLTK packages: stopwords, punkt
 cmd: su postgres -c "python3 -m nltk.downloader stopwords" && su postgres -c "python3 -m nltk.downloader punkt"
 
 methods:
@@ -42,6 +43,7 @@ methods:
           tajik: Tajik
           turkish: Turkish
         allow_empty_value: false
+
       additional:
         label: Specify additional stop words
         type: tags

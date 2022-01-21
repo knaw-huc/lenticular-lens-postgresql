@@ -7,11 +7,12 @@ methods:
       the match of the numeric values of the selected properties according to a delta.
     see_also:
       - https://lenticularlens.org/matching-method/numbers
-    threshold_range: ℕ
-    match: delta({type}, {source}, {target}, {distance_start}, {distance_end})
+
+    type: filter
     field_type: number
-    accepts_similarity_method: false
-    is_similarity_method: false
+    threshold_range: ℕ
+    sql_template: delta({type}, {source}, {target}, {distance_start}, {distance_end})
+
     items:
       type:
         label: Size difference
@@ -20,10 +21,12 @@ methods:
           "<>": Irrelevant
           "<": Source < Target
           ">": Source > Target
+
       start:
         label: Start
         type: number
         default_value: 0
+
       end:
         label: End
         type: number
@@ -35,11 +38,12 @@ methods:
       the match of the date values of the selected properties according to a delta.
     see_also:
       - https://lenticularlens.org/matching-method/time-delta
-    threshold_range: ℕ
-    match: delta({type}, {source}, {target}, {days} + ({months} * 30) + ({years} * 365))
+
+    type: filter
     field_type: date
-    accepts_similarity_method: false
-    is_similarity_method: false
+    threshold_range: ℕ
+    sql_template: delta({type}, {source}, {target}, {days} + ({months} * 30) + ({years} * 365))
+
     items:
       type:
         label: Should occur before or after?
@@ -48,24 +52,28 @@ methods:
           "<>": Irrelevant
           "<": Source event before target event
           ">": Source event after target event
+
       years:
         label: Years
         type: number
         default_value: 0
         step: 1
         min_value: 0
+
       months:
         label: Months
         type: number
         default_value: 0
         step: 1
         min_value: 0
+
       days:
         label: Days
         type: number
         default_value: 0
         step: 1
         min_value: 0
+
       format:
         label: Date format
         type: string

@@ -14,10 +14,10 @@ methods:
     see_also:
       - https://lenticularlens.org/matching-method/metaphone
       - https://en.wikipedia.org/wiki/Metaphone
-    threshold_range: "{0, 1}"
-    field: metaphone({property}, {max})
-    accepts_similarity_method: true
-    is_similarity_method: false
+
+    type: normalizer
+    sql_template: metaphone({property}, {max})
+
     items:
       max:
         label: Maximum size
@@ -37,7 +37,6 @@ methods:
     see_also:
       - https://lenticularlens.org/matching-method/double-metaphone
       - https://en.wikipedia.org/wiki/Metaphone
-    threshold_range: "{0, 1}"
-    field: dmetaphone({property})
-    accepts_similarity_method: true
-    is_similarity_method: false
+
+    type: normalizer
+    sql_template: dmetaphone({property})

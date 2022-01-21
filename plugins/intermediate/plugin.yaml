@@ -10,23 +10,27 @@ methods:
       same identifier.
     see_also:
       - https://lenticularlens.org/matching-method/intermediate
+
+    type: filter
     threshold_range: "{0, 1}"
-    match: "{source_intermediate} = {target_intermediate}"
-    accepts_similarity_method: false
-    is_similarity_method: false
+    sql_template: "{source_intermediate} = {target_intermediate}"
+
     items:
       entity_type_selection:
         label: Intermediate dataset
         type: entity_type_selection
+
       intermediate_source:
         label: Source
         type: property
         default_value:
           - - ''
         entity_type_selection_key: entity_type_selection
+
       intermediate_target:
         label: Target
         type: property
         default_value:
           - - ''
         entity_type_selection_key: entity_type_selection
+

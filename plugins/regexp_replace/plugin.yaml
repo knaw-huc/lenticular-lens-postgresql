@@ -10,11 +10,13 @@ methods:
         type: string
         default_value: ''
         allow_empty_value: false
+
       replacement:
         label: Replacement
         type: string
         default_value: ''
         allow_empty_value: false
+
       flags:
         label: Flags
         type: string

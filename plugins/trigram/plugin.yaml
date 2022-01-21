@@ -13,15 +13,15 @@ methods:
       - https://lenticularlens.org/matching-method/trigram
       - https://en.wikipedia.org/wiki/Trigram
       - https://en.wikipedia.org/wiki/N-gram
+
+    type: similarity
     threshold_range: "]0, 1]"
-    match: "{source} % {target}"
-    similarity: similarity({source}, {target})
-    before_index: SELECT set_config('pg_trgm.similarity_threshold', {threshold}, true);
-    index: gin ({target} gin_trgm_ops)
-    requires_postgresql:
-      - pg_trgm
-    accepts_similarity_method: false
-    is_similarity_method: true
+    sql_templates:
+      similarity: similarity({source}, {target})
+      condition: "{source} % {target}"
+      before_index: SELECT set_config('pg_trgm.similarity_threshold', {threshold}, true);
+      index: gin ({target} gin_trgm_ops)
+
     items:
       threshold:
         label: Similarity threshold

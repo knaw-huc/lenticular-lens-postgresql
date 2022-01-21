@@ -17,10 +17,10 @@ methods:
     see_also:
       - https://lenticularlens.org/matching-method/soundex
       - https://en.wikipedia.org/wiki/Soundex
-    threshold_range: "{0, 1}"
-    field: soundex({property}, {size})
-    accepts_similarity_method: true
-    is_similarity_method: false
+
+    type: normalizer
+    sql_template: soundex({property}, {size})
+
     items:
       size:
         label: Soundex size

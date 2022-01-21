@@ -10,10 +10,10 @@ methods:
     description: Gerrit Bloothooft description
     see_also:
       - https://lenticularlens.org/matching-method/bloothooft
-    threshold_range: "{0, 1}"
-    field: bloothooft({property}, {name_type})
-    accepts_similarity_method: true
-    is_similarity_method: false
+
+    type: normalizer
+    sql_template: bloothooft({property}, {name_type})
+
     items:
       name_type:
         label: Type of name

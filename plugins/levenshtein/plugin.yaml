@@ -12,12 +12,13 @@ methods:
     see_also:
       - https://lenticularlens.org/matching-method/levenshtein
       - https://en.wikipedia.org/wiki/Edit_distance
+
+    type: similarity
     threshold_range: ℕ
-    match: levenshtein({source}, {target}, {max_distance})
-    similarity: similarity({source}, {target}, levenshtein({source}, {target}, {max_distance}))
-    condition: "{match} <= {max_distance}"
-    accepts_similarity_method: false
-    is_similarity_method: true
+    sql_templates:
+      similarity: similarity({source}, {target}, levenshtein({source}, {target}, {max_distance}))
+      condition: "levenshtein({source}, {target}, {max_distance}) <= {max_distance}"
+
     items:
       max_distance:
         label: Maximum distance
@@ -41,11 +42,13 @@ methods:
     see_also:
       - https://lenticularlens.org/matching-method/levenshtein
       - https://en.wikipedia.org/wiki/Edit_distance
+
+    type: similarity
     threshold_range: "]0, 1]"
-    similarity: similarity({source}, {target}, levenshtein({source}, {target}, -1))
-    condition: "{similarity} >= {threshold}"
-    accepts_similarity_method: false
-    is_similarity_method: true
+    sql_templates:
+      similarity: similarity({source}, {target}, levenshtein({source}, {target}, -1))
+      condition: "{similarity} >= {threshold}"
+
     items:
       threshold:
         label: Similarity threshold

@@ -8,10 +8,11 @@ methods:
       input dates.
     see_also:
       - https://lenticularlens.org/matching-method/same-year-month
+
+    type: filter
     threshold_range: "{0, 1}"
-    field: get_date_part({date_part}, {property})
-    accepts_similarity_method: false
-    is_similarity_method: false
+    sql_template: get_date_part({date_part}, {property})
+
     items:
       date_part:
         label: Same Year/Month?
@@ -29,14 +30,17 @@ methods:
               - predicate: http://www.w3.org/2006/time#unitMonth
                 prefix: time
                 uri: http://www.w3.org/2006/time#
+
             year:
               - predicate: http://www.w3.org/2006/time#unitYear
                 prefix: time
                 uri: http://www.w3.org/2006/time#
+
             year_month:
               - predicate: http://www.w3.org/2006/time#unitYear
                 prefix: time
                 uri: http://www.w3.org/2006/time#
+
               - predicate: http://www.w3.org/2006/time#unitMonth
                 prefix: time
                 uri: http://www.w3.org/2006/time#

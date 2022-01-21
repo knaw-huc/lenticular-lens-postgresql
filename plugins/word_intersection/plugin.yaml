@@ -14,24 +14,29 @@ methods:
       any pair of strings regardless of the strings sizes.
     see_also:
       - https://lenticularlens.org/matching-method/word-intersection
+
+    type: similarity
     threshold_range: "]0, 1]"
-    similarity: word_intersection({source}, {target}, {ordered}, {approximate}, {stop_symbols})
-    condition: "{similarity} >= {threshold}"
-    accepts_similarity_method: false
-    is_similarity_method: true
+    sql_templates:
+      similarity: word_intersection({source}, {target}, {ordered}, {approximate}, {stop_symbols})
+      condition: "{similarity} >= {threshold}"
+
     items:
       ordered:
         label: Keep the order of the words
         type: boolean
         default_value: false
+
       approximate:
         label: Each word should be approximated
         type: boolean
         default_value: true
+
       stop_symbols:
         label: Stop symbols
         type: string
         default_value: ".-,+'?;()–"
+
       threshold:
         label: Similarity threshold
         type: range

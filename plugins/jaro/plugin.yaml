@@ -9,11 +9,13 @@ methods:
     see_also:
       - https://lenticularlens.org/matching-method/jaro
       - https://rosettacode.org/wiki/Jaro_distance
+
+    type: similarity
     threshold_range: "]0, 1]"
-    similarity: jaro({source}, {target})
-    condition: "{similarity} >= {threshold}"
-    accepts_similarity_method: false
-    is_similarity_method: true
+    sql_templates:
+      similarity: jaro({source}, {target})
+      condition: "{similarity} >= {threshold}"
+
     items:
       threshold:
         label: Similarity threshold
@@ -34,11 +36,13 @@ methods:
     see_also:
       - https://lenticularlens.org/matching-method/jaro-winkler
       - https://www.geeksforgeeks.org/jaro-and-jaro-winkler-similarity
+
+    type: similarity
     threshold_range: "]0, 1]"
-    similarity: jaro_winkler({source}, {target}, {prefix_weight})
-    condition: "{similarity} >= {threshold}"
-    accepts_similarity_method: false
-    is_similarity_method: true
+    sql_templates:
+      similarity: jaro_winkler({source}, {target}, {prefix_weight})
+      condition: "{similarity} >= {threshold}"
+
     items:
       threshold:
         label: Similarity threshold
@@ -51,6 +55,7 @@ methods:
           predicate: https://lenticularlens.org/voidPlus/similarityThreshold
           prefix: voidPlus
           uri: https://lenticularlens.org/voidPlus/
+
       prefix_weight:
         label: Prefix weight
         type: range

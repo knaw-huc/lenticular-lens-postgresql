@@ -7,7 +7,7 @@ methods:
       property values are identical.
     see_also:
       - https://lenticularlens.org/matching-method/exact
+
+    type: filter
     threshold_range: "{0, 1}"
-    match: "{source} = {target}"
-    accepts_similarity_method: false
-    is_similarity_method: false
+    sql_template: "{source} = {target}"
