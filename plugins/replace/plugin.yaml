@@ -2,6 +2,7 @@ type: transformer
 
 methods:
   replace:
+    order: 30
     label: Replace
     sql_template: replace({property}, {from}, {to})
     items:

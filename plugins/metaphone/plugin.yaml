@@ -6,6 +6,7 @@ requires:
 
 methods:
   metaphone:
+    order: 70
     label: Metaphone
     description: Metaphone is a phonetic algorithm for a more accurate encoding of words
       by sound (as compared to Soundex) as pronounced in English. In this algorithm
@@ -28,6 +29,7 @@ methods:
         max_value: 255
 
   dmetaphone:
+    order: 71
     label: Double Metaphone
     description: Double metaphone is a third generation phonetic algorithm improvement
       after Soundex and Metaphone for an accurately encoding words by sound as pronounced

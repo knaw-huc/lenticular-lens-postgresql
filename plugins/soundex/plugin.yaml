@@ -8,6 +8,7 @@ requires:
 
 methods:
   soundex:
+    order: 40
     label: Soundex
     description: Soundex is a phonetic algorithm for indexing names by sound, as pronounced
       in English. The goal is for homophones to be encoded to the same representation

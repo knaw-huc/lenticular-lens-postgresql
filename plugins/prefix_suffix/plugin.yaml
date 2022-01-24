@@ -2,6 +2,7 @@ type: transformer
 
 methods:
   prefix:
+    order: 20
     label: Prefix
     sql_template: "{prefix} || {property}"
     items:
@@ -13,6 +14,7 @@ methods:
         allow_empty_value: false
 
   suffix:
+    order: 21
     label: Suffix
     sql_template: "{property} || {suffix}"
     items:

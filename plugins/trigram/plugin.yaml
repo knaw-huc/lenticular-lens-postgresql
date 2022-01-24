@@ -6,6 +6,7 @@ requires:
 
 methods:
   trigram:
+    order: 80
     label: Trigram
     description: Trigrams are a special case of the n-gram, where n is 3. It is a contiguous
       sequence of three items from a given sample.

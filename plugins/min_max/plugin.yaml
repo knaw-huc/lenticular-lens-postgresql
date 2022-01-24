@@ -2,18 +2,21 @@ type: filter_function
 
 methods:
   minimal:
+    order: 40
     label: Has minimal value
     sql_template: to_numeric_immutable({property}) IS NOT NULL AND to_numeric_immutable({property})
       >= {value}
     type: number
 
   maximum:
+    order: 41
     label: Has maximum value
     sql_template: to_numeric_immutable({property}) IS NOT NULL AND to_numeric_immutable({property})
       <= {value}
     type: number
 
   minimal_date:
+    order: 42
     label: Has minimal date
     sql_template: to_date_immutable({property}, {format}) IS NOT NULL AND to_date_immutable({property},
       {format}) >= to_date_immutable({value}, 'YYYY-MM-DD')
@@ -22,6 +25,7 @@ methods:
       and year respectively
 
   maximum_date:
+    order: 43
     label: Has maximum date
     sql_template: to_date_immutable({property}, {format}) IS NOT NULL AND to_date_immutable({property},
       {format}) <= to_date_immutable({value}, 'YYYY-MM-DD')
@@ -30,11 +34,13 @@ methods:
       and year respectively
 
   minimal_appearances:
+    order: 44
     label: Has minimal appearances
     sql_template: array_length({property} || ARRAY[]::text[], 1) >= {value}
     type: number
 
   maximum_appearances:
+    order: 45
     label: Has maximum appearances
     sql_template: array_length({property} || ARRAY[]::text[], 1) <= {value}
     type: number

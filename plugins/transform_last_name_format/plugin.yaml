@@ -2,6 +2,7 @@ type: transformer
 
 methods:
   transform_last_name_format:
+    order: 10
     label: Transform 'last name first' format
     sql_template: transform_last_name_format({property}, {infix})
     items:

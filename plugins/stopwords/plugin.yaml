@@ -11,6 +11,7 @@ cmd: su postgres -c "python3 -m nltk.downloader stopwords" && su postgres -c "py
 
 methods:
   stopwords:
+    order: 70
     label: Stopwords
     sql_template: remove_stopwords({key}, {property})
     items:

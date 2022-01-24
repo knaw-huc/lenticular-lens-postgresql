@@ -2,6 +2,7 @@ type: matching_method
 
 methods:
   numbers_delta:
+    order: 90
     label: Numbers Delta
     description: The numbers delta is used to align the source and the target by approximating
       the match of the numeric values of the selected properties according to a delta.
@@ -33,6 +34,7 @@ methods:
         default_value: 0
 
   time_delta:
+    order: 91
     label: Time Delta
     description: The time delta is used to align the source and the target by approximating
       the match of the date values of the selected properties according to a delta.

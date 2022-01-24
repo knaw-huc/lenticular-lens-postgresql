@@ -2,11 +2,13 @@ type: filter_function
 
 methods:
   equals:
+    order: 10
     label: Equal to
     sql_template: "{property} = {value}"
     type: string
 
   not_equals:
+    order: 11
     label: Not equal to
     sql_template: "{property} != {value}"
     type: string

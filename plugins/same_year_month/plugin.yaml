@@ -2,6 +2,7 @@ type: matching_method
 
 methods:
   same_year_month:
+    order: 100
     label: Same Year/Month
     description: Same Year/Month is used to align source and target’s IRIs whenever
       an exact match of the year or year and month is observed between source and target's

@@ -2,9 +2,11 @@ type: filter_function
 
 methods:
   empty:
+    order: 20
     label: Has no values
     sql_template: "{property} IS NULL"
 
   not_empty:
+    order: 21
     label: Has a value
     sql_template: "{property} IS NOT NULL"

@@ -2,6 +2,7 @@ type: matching_method
 
 methods:
   levenshtein_distance:
+    order: 30
     label: Levenshtein distance
     description: This method is used to align source and target’s IRIs whenever the
       distance of their respective user selected property values are above a given Levenshtein
@@ -32,6 +33,7 @@ methods:
           uri: https://lenticularlens.org/voidPlus/
 
   levenshtein_normalized:
+    order: 31
     label: Levenshtein normalized
     description: This method is used to align source and target’s IRIs whenever the
       similarity score of their respective user selected property values are above a

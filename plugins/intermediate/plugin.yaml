@@ -2,6 +2,7 @@ type: matching_method
 
 methods:
   intermediate:
+    order: 20
     label: Intermediate dataset
     description: The method aligns the source and the target’s IRIs via an intermediate
       database by using properties that potentially present different descriptions of

@@ -2,5 +2,6 @@ type: transformer
 
 methods:
   unaccent:
+    order: 40
     label: Unaccent
     sql_template: unaccent({property})

@@ -8,6 +8,7 @@ requires:
 
 methods:
   word_intersection:
+    order: 60
     label: Word Intersection
     description: The word intersection approximation method is originally designed to
       find a subset of words within a larger text. However, it could also be used for

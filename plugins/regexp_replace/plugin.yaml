@@ -2,6 +2,7 @@ type: transformer
 
 methods:
   regexp_replace:
+    order: 60
     label: Regular expression replace
     sql_template: regexp_replace({property}, {pattern}, {replacement}, {flags})
     items:

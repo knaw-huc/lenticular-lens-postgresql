@@ -2,6 +2,7 @@ type: matching_method
 
 methods:
   exact:
+    order: 10
     label: Exact match
     description: Aligns source and target’s IRIs whenever their respective user selected
       property values are identical.

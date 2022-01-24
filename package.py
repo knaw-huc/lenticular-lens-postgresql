@@ -32,11 +32,14 @@ with open(build_dir + '/lenticular_lens--1.0.sql', 'w') as f:
         f.write('\n')
 
     for config in plugins_config.values():
-        for (method_name, method_config) in config['methods'].items():
-            if config['type'] == 'filter_function' or \
-                    config['type'] == 'matching_method' or \
-                    config['type'] == 'transformer':
-                config_json = json.dumps(method_config).replace("'", "''")
+        if config['type'] == 'filter_function' or \
+                config['type'] == 'matching_method' or \
+                config['type'] == 'transformer':
+            for (method_name, method_config) in config['methods'].items():
+                method_config_with_order = \
+                    {**method_config, 'items_order': list(method_config.get('items', dict()).keys())}
+
+                config_json = json.dumps(method_config_with_order).replace("'", "''")
                 f.write(f"INSERT INTO {config['type']}s "
                         f"VALUES ('{method_name}', '{config_json}');\n")
     f.write('\n')

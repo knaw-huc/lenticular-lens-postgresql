@@ -2,6 +2,7 @@ type: matching_method
 
 methods:
   jaro:
+    order: 110
     label: Jaro
     description: Jaro distance is a measure of similarity between two strings. The higher
       the Jaro distance for two strings is, the more similar the strings are. The score
@@ -30,6 +31,7 @@ methods:
           uri: https://lenticularlens.org/voidPlus/
 
   jaro_winkler:
+    order: 111
     label: Jaro-Winkler
     description: Jaro-Winkler boosts up the Jaro algorithm’s result by increasing it
       whenever the compared strings share a prefix of a maximum of four characters.

@@ -6,6 +6,7 @@ requires:
 
 methods:
   bloothooft:
+    order: 50
     label: Gerrit Bloothooft
     description: Gerrit Bloothooft description
     see_also:

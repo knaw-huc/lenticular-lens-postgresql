@@ -76,6 +76,9 @@ There are two properties that can be used in the SQL template:
 The YAML configuration looks as follows:
 
 ```yaml
+# Ordering among the other filter functions
+order: 10
+
 # A human readable label
 label: My filter function
 
@@ -114,7 +117,8 @@ used in the SQL templates:
 The YAML configuration looks as follows:
 
 ```yaml
-# A human-readable label, description and reference URLs
+# An ordering among the other matching methods; a human-readable label, description and reference URLs
+order: 10
 label: My matching method
 description: My awesome matching method.
 see_also:
@@ -160,6 +164,9 @@ used in the SQL template:
 The YAML configuration looks as follows:
 
 ```yaml
+# An ordering among the other transformers
+order: 10
+
 # A human readable label
 label: My transformer
 
