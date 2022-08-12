@@ -10,7 +10,7 @@ methods:
     see_also:
       - https://lenticularlens.org/matching-method/same-year-month
 
-    type: filter
+    type: normalizer
     threshold_range: "{0, 1}"
     sql_template: get_date_part({date_part}, {property})
 
