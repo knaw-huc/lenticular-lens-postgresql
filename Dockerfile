@@ -1,9 +1,9 @@
 FROM postgres:14 AS builder
 
 RUN apt-get update && \
-    apt-get install -y wget unzip python3-pip postgresql-server-dev-14 postgresql-plpython3-14
+    apt-get install -y wget unzip python3-pip python3-venv postgresql-server-dev-14 postgresql-plpython3-14
 
-RUN pip3 install setuptools wheel pyyaml
+RUN pip3 install build pyyaml
 
 COPY ./ /opt
 
@@ -15,7 +15,7 @@ RUN ./build.sh && ./post-install.sh
 
 FROM postgres:14
 
-COPY --from=builder /opt/build/dist/* /app/
+COPY --from=builder /opt/build/python/dist/* /app/
 COPY --from=builder /opt/build/post-install.sh /app/
 COPY --from=builder /usr/lib/postgresql/14/lib/lenticular_lens.so /usr/lib/postgresql/14/lib/
 COPY --from=builder /usr/lib/postgresql/14/lib/bitcode/lenticular_lens/ /usr/lib/postgresql/14/lib/bitcode/lenticular_lens/
