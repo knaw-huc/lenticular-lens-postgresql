@@ -2,6 +2,7 @@ import os
 from inspect import cleandoc
 
 import yaml
+import toml
 import json
 import shutil
 
@@ -89,21 +90,20 @@ for name in plugins:
         shutil.copyfile(python_path, python_package_dir + '/' + name + '.py')
 
 # Create setup.py for packaging Python code
-with open(python_dir + '/setup.py', 'w') as f:
-    requires = {requires
-                for config in plugins_config.values()
-                for requires in config.get('requires', {}).get('python', [])}
-
-    f.write(cleandoc(f'''
-    import setuptools
-    
-    setuptools.setup(
-        name='lenticular_lens',
-        version='1.0',
-        packages=setuptools.find_packages(),
-        install_requires=[{", ".join(["'" + req + "'" for req in requires])}]
-    )
-    '''))
+with open(python_dir + '/pyproject.toml', 'w') as f:
+    toml.dump({
+        'build-system': {
+            'requires': ['setuptools', 'setuptools-scm'],
+            'build-backend': 'setuptools.build_meta'
+        },
+        'project': {
+            'name': 'lenticular_lens',
+            'version': '1.0',
+            'dependencies': {requires
+                             for config in plugins_config.values()
+                             for requires in config.get('requires', {}).get('python', [])}
+        }
+    }, f)
 
 # Prepare C code
 c_dir = build_dir + '/c'
