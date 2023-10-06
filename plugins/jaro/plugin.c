@@ -3,6 +3,7 @@
 #include "mb/pg_wchar.h"
 #include "util.h"
 #include "fmgr.h"
+#include "varatt.h"
 
 /*
  * Jaro code based on http://www.rosettacode.org/wiki/Jaro_distance#C

@@ -29,6 +29,7 @@
 #include "mb/pg_wchar.h"
 #include "util.h"
 #include "fmgr.h"
+#include "varatt.h"
 
 /*
  * Levenshtein distance implementation from the PostgreSQL fuzzystrmatch module,
