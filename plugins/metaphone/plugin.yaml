@@ -25,8 +25,8 @@ methods:
         type: number
         default_value: 20
         step: 1
-        min_value: 1
-        max_value: 255
+        min_incl_value: 1
+        max_incl_value: 255
 
   dmetaphone:
     order: 71

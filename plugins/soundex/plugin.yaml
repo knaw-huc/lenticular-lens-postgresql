@@ -28,8 +28,8 @@ methods:
         type: range
         default_value: 4
         step: 1
-        min_value: 1
-        max_value: 5
+        min_incl_value: 1
+        max_incl_value: 5
         rdf:
           predicate: https://lenticularlens.org/voidPlus/soundexSize
           prefix: voidPlus

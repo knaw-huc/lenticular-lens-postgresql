@@ -60,21 +60,21 @@ methods:
         type: number
         default_value: 0
         step: 1
-        min_value: 0
+        min_incl_value: 0
 
       months:
         label: Months
         type: number
         default_value: 0
         step: 1
-        min_value: 0
+        min_incl_value: 0
 
       days:
         label: Days
         type: number
         default_value: 0
         step: 1
-        min_value: 0
+        min_incl_value: 0
 
       format:
         label: Date format

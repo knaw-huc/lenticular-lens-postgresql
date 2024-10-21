@@ -1,4 +1,4 @@
-ARG PG_VERSION=16
+ARG PG_VERSION=17
 
 FROM postgres:${PG_VERSION} AS builder
 
